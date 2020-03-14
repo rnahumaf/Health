@@ -1,38 +1,213 @@
 {
     "COVID": {
-        "Reference": "https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(20)30183-5/fulltext",
-        "Date": "January 24, 2020",
-        "Journal": "The Lancet",
-        "Methods": "RT-PCR confirmed cases admitted to a hospital in Wuhan",
-        "Results":{
-            "N": 41,
-            "Men": "73% (30)",
-            "Women": "27% (11)",
-            "Median age": "49 years (IQR 41-58)",
-            "Signs and Symptoms":{
-                "Fever": "98% (40)",
-                "Cough": "76% (31)",
-                "Myalgia or fatigue": "44% (18)",
-                "Dyspnoea": "55% (22)",
-                "Dyspnoea (median time from onset)": "8 days (IQR 5-13)",
-                "Lymphopenia": "55% (22)",
-                "Pneumonia with abnormal findings on chest CT": "100% (41)" 
+        "1": {
+            "Reference": "https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(20)30183-5/fulltext",
+            "Date": "January 24, 2020",
+            "Journal": "The Lancet",
+            "Methods": "RT-PCR confirmed cases admitted to a hospital in Wuhan",
+            "Results": {
+                "N": 41,
+                "Men": "73% (30)",
+                "Women": "27% (11)",
+                "Median age": "49 years (IQR 41-58)",
+                "Signs and Symptoms": {
+                    "Fever": "98% (40)",
+                    "Cough": "76% (31)",
+                    "Myalgia or fatigue": "44% (18)",
+                    "Dyspnoea": "55% (22)",
+                    "Dyspnoea (median time from onset)": "8 days (IQR 5-13)",
+                    "Lymphopenia": "55% (22)",
+                    "Pneumonia with abnormal findings on chest CT": "100% (41)"
+                },
+                "Complications": {
+                    "Acute respiratory distress syndrome ": "29% (12)",
+                    "RNAaemia": "15% (6)",
+                    "Acute cardiac injury": "12% (5)",
+                    "Secondary infection": "10% (4)",
+                    "Admission to an ICU (all)": "32% (13)",
+                    "Death": "15% (6)"
+                },
+                "Risks": {
+                    "Admission to an ICU (men)": "36,6% (11/30)",
+                    "Admission to an ICU (women)": "18,2% (2/11)",
+                    "Admission to an ICU (> 64 y)": "50% (3/6)",
+                    "Admission to an ICU (50-64 y)": "21,4% (3/14)",
+                    "Admission to an ICU (25-49 y)": "35% (7/20)",
+                    "Admission to an ICU (< 25 y)": "0% (0/1)"
+                }
+            }
+        },
+        "2": {
+            "Reference": "https://jamanetwork.com/journals/jama/fullarticle/2761044",
+            "Date": "February 7, 2020",
+            "Journal": "JAMA",
+            "Methods": "RT-PCR confirmed cases admitted to a hospital in Wuhan",
+            "Results": {
+                "N": 138,
+                "Men": "54.3% (75)",
+                "Women": "45.7% (63)",
+                "Median age": "56 years (IQR 42-68)",
+                "Signs and Symptoms": {
+                    "Fever": "98.6% (136)",
+                    "Fatigue": "69.6% (96)",
+                    "Dry cough": "59.4% (82)",
+                    "Myalgia": "34.8% (48)",
+                    "Dyspnoea": "32.2% (43)",
+                    "Lymphopenia": "70.3% (97)",
+                    "Prolonged prothrombin time": "58% (80)",
+                    "Abnormal findings on chest CT": "100% (138)"
+                },
+                "Complications": {
+                    "Acute respiratory distress syndrome": "15.9% (22)",
+                    "Dyspnoea (time from onset)": "5 days",
+                    "Hospital admission (time from onset)": "7 days",
+                    "ARDS (time from onset)": "8 days",
+                    "Shock": "8% (11)",
+                    "Arrhythmia": "11.6% (16)"
+                },
+                "Risks": {
+                    "Admission to an ICU (all)": "26.1% (36)",
+                    "Admission to an ICU (men)": "29.3% (11/75)",
+                    "Admission to an ICU (women)": "22.2% (14/63)"
+                }
+            }
+        },
+        "3": {
+            "Reference": "https://www.nejm.org/doi/full/10.1056/NEJMoa2002032",
+            "Date": "February 28, 2020",
+            "Journal": "The New England Journal of Medicine",
+            "Methods": "Laboratory-confirmed Covid-19 patients from 552 hospitals in 30 provinces, regions and municipalities in China. The primary end point was admission to an ICU, mechanical ventilation or death.",
+            "Results": {
+                "N": 1099,
+                "Men": "58.2% (640)",
+                "Women": "41.8% (459)",
+                "Median age": "47 years (IQR 35-58)",
+                "Signs and Symptoms": {
+                    "Fever": "88.7% (975)",
+                    "Temperature": {
+                        "< 37.5": "9.9%",
+                        "37.5 - 38.0": "30.9%",
+                        "38.1 - 39.0": "46.9%",
+                        "> 39.0": "12.3%"
+                    },
+                    "Cough": "67.8% (745)",
+                    "Fatigue": "38.1% (419)",
+                    "Sputum production": "33.7% (370)",
+                    "Dyspnoea": "18.7% (205)",
+                    "Myalgia or arthralgia": "14.9% (164)",
+                    "Abnormalities on chest CT": "86.2% (840)",
+                    "Lymphopenia": "83.2% (731)"
+                },
+                "Complications": {
+                    "Acute respiratory distress syndrome": "3.4% (37/1099)",
+                    "Physician-diagnosed pneumonia": "91.1% (972)",
+                    "Pneumonia (time from onset)": "3 days (IQR 1-6)"
+                },
+                "Risks": {
+                    "Severe (all)": "15.7% (173/1099)",
+                    "Primary end point (all)": "6.1% (67/1099)",
+                    "Severe (men)": "15.6% (100/640)",
+                    "Primary end point (men)": "7% (45/640)",
+                    "Severe (women)": "15.9% (73/459)",
+                    "Primary end point (women)": "4.8% (22/459)",
+                    "Severe (0-14 y)": "11.1% (1/9)",
+                    "Primary end point (0-14 y)": "0% (0/9)",
+                    "Severe (15-49 y)": "12% (67/557)",
+                    "Primary end point (15-49 y)": "2.2% (12/557)",
+                    "Severe (50-64 y)": "17.5% (51/292)",
+                    "Primary end point (50-64 y)": "7.2% (21/292)",
+                    "Severe (> 64 y)": "28.8% (44/153)",
+                    "Primary end point (> 64 y)": "20.9% (32/153)",
+                    "Death (all)": "1.4% (15/1099)",
+                    "Death (Severe)": "8.1% (14/173)",
+                    "Death (Primary end point)": "22.4% (15/67)"
+                }
+            }
+        },
+        "4": {
+            "Reference": "https://www.medrxiv.org/content/10.1101/2020.03.04.20031104v1.full.pdf",
+            "Date": "March 3, 2020",
+            "Journal": "Preprint https://doi.org/10.1101/2020.03.04.20031104",
+            "Methods": "An estimation of the age-specific case fatality ratio (CFR) by fitting a transmission model to data from China, accounting for underreporting of cases and the time delay to death. Obtained adjusted and age-specific estimates of the overall CFR of COVID-19 among both symptomatic and asymptomatic patients in the Hubei province until 11 February 2020",
+            "Assumptions": {
+                "Incubation period":"5.6 days",
+                "Infections that lead to symptoms and transmission": "49%",
+                "Onset to removal (isolation)":"2.9 days",
+                "Onset to death": "20.2 days (SD 11.6)"
             },
-            "Complications":{
-                "Acute respiratory distress syndrome ": "29% (12)",
-                "RNAaemia": "15% (6)",
-                "Acute cardiac injury": "12% (5)",
-                "Secondary infection": "10% (4)",
-                "Admission to an ICU (all)": "32% (13)",
-                "Death": "15% (6)"
-            },
-            "Risks":{
-                "Admission to an ICU (men)": "36,6% (11/30)",
-                "Admission to an ICU (women)": "18,2% (2/11)",
-                "Admission to an ICU (> 64 y)": "50% (3/6)",
-                "Admission to an ICU (50-64 y)": "21,4% (3/14)",
-                "Admission to an ICU (25-49 y)": "35% (7/20)",
-                "Admission to an ICU (< 25 y)": "0% (0/1)"
+            "Results": {
+                "Adjusted CFR (symptomatic)": "3.3%",
+                "Adjusted CFR (all)": "1.6%",
+                "Adjusted CFR (symptomatic 0-9 y)": "0.019%",
+                "Adjusted CFR (all 0-9 y)": "0.0094%",
+                "Adjusted CFR (symptomatic 10-19 y)": "0.046%",
+                "Adjusted CFR (all 10-19 y)": "0.022%",
+                "Adjusted CFR (symptomatic 20-29 y)": "0.19%",
+                "Adjusted CFR (all 20-29 y)": "0.091%",
+                "Adjusted CFR (symptomatic 30-39 y)": "0.38%",
+                "Adjusted CFR (all 30-39 y)": "0.18%",
+                "Adjusted CFR (symptomatic 40-49 y)": "0.82%",
+                "Adjusted CFR (all 40-49 y)": "0.4%",
+                "Adjusted CFR (symptomatic 50-59 y)": "2.7%",
+                "Adjusted CFR (all 50-59 y)": "1.3%",
+                "Adjusted CFR (symptomatic 60-69 y)": "9.4%",
+                "Adjusted CFR (all 60-69 y)": "4.6%",
+                "Adjusted CFR (symptomatic 70-79 y)": "20%",
+                "Adjusted CFR (all 70-79 y)": "9.8%",
+                "Adjusted CFR (symptomatic 80+ y)": "36%",
+                "Adjusted CFR (all 80+ y)": "18%"
+            }
+        },
+        "5": {
+            "Reference": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3526307",
+            "Journal": "The Lancet",
+            "Date": "February 5, 2020",
+            "Methods": "Exponential Growth (EG) and maximum likelihood estimation (ML) were applied to estimate the reproductive number (R) of 2019-nCoV. Data of confirmed 2019-nCoV cases before January 23, 2020 were collected from medical records, epidemiological investigations or official websites.",
+            "Results": {
+                "Incubation period (average)": "4.8 days (+- 2.6 days)",
+                "From onset to isolation of cases":"2.9 days (+- 3)",
+                "R value (Exponential Growth estimation)": "2.9 (95%CI 2.32-3.63)",
+                "R value (Maximum Likelihood estimation)": "2.92 (95%CI 2.28-3.67)"
+            }
+
+        },
+        "6": {
+            "Reference":"https://annals.org/aim/fullarticle/2762808/incubation-period-coronavirus-disease-2019-covid-19-from-publicly-reported",
+            "Journal": "Annals of Internal Medicine",
+            "Date": "March 10 2020",
+            "Methods": "Pooled analysis of confirmed COVID-19 cases reported between 4 January 2020 and 24 February 2020. To estimate the length of the incubation period of COVID-19 the study searched for news and public health reports of confirmed COVID-19 cases in areas with no known community transmission, including provinces, regions, and countries outside Hubei. Searched for reports in both English and Chinese.",
+            "Results": {
+                "Median incubation period": "5.1 days (95%CI 4.5-5.8)",
+                "Onset of symptoms, in symptomatic cases": "< 11.5 days in 97.5% of cases (8.2-15.6)",
+                "Missed infections after 7-day quarantine": "2120.6 in 10 000",
+                "Missed infections after 14-day quarantine": "101 in 10 000",
+                "Missed infections after 21-day quarantine": "9.5 in 10 000",
+                "Missed infections after 28-day quarantine": "1.4 in 10 000"
+            }
+        },
+        "7": {
+            "Reference": "https://www.niid.go.jp/niid/en/2019-ncov-e/9407-covid-dp-fe-01.html",
+            "Journal": "National Institute of Infectious Diseases of Japan",
+            "Date": "February 19, 2020",
+            "Methods": "A cruise ship, named the Diamond Princess, had travel that originated in Yokohama on 20 January and included stops in Japan (Kagoshima), Hong Kong, Vietnam, Taiwan and Japan (Okinawa), before arriving back in Yokohama on 3 February. During this time, a passenger was confirmed positive for Novel coronavirus.",
+            "Results": {
+                "Population on board": "3711 passenger and crew",
+                "Total tested cases": "2404",
+                "Total confirmed cases": "542 (22.5%)",
+                "Asymptomatic cases when tested": "48% (255/531)"
+            }
+        },
+        "8": {
+            "Reference": "https://www.medrxiv.org/content/10.1101/2020.02.14.20023127v1.full.pdf",
+            "Journal": "Preprint https://doi.org/10.1101/2020.02.14.20023127",
+            "Date": "February 17, 2020",
+            "Methods": "Observations of reported infection and spread within China in conjunction with mobility data, a networked dynamic metapopulation model and Bayesian inference, to infer critical epidemiological characteristics associated with the emerging coronavirus, including the fraction of undocumented infections and their contagiousness.",
+            "Results": {
+                "Undocumented infections": "86%",
+                "Basic reproductive number (Jan 10-23)": "2.23",
+                "Effective reproductive number (Jan 24-Feb 8)": "1",
+                "Infectious period": "3.45 days (2.9-3.8)",
+                "Latency period": "3.77 days (3.3-4.1)"
             }
         }
     }
