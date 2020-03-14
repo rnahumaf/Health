@@ -22,11 +22,17 @@
                 "Acute respiratory distress syndrome ": "29% (12)",
                 "RNAaemia": "15% (6)",
                 "Acute cardiac injury": "12% (5)",
-                "Secondary infection": "10% (4)"
-            },
-            "Severe":{
-                "Admission to an ICU": "32% (13)",
+                "Secondary infection": "10% (4)",
+                "Admission to an ICU (all)": "32% (13)",
                 "Death": "15% (6)"
+            },
+            "Risks":{
+                "Admission to an ICU (men)": "36,6% (11/30)",
+                "Admission to an ICU (women)": "18,2% (2/11)",
+                "Admission to an ICU (> 64 y)": "50% (3/6)",
+                "Admission to an ICU (50-64 y)": "21,4% (3/14)",
+                "Admission to an ICU (25-49 y)": "35% (7/20)",
+                "Admission to an ICU (< 25 y)": "0% (0/1)"
             }
         }
     }
