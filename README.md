@@ -1,6 +1,10 @@
 # Health
 Estudos relacionados à saúde em geral.
 
+## Estudos do Coronavírus
+
+[Acesse aqui](https://rnahumaf.github.io/Health/COVID.json) o banco de dados de estudos epidemiológicos do coronavírus.
+
 ## Referências utilizadas no estudo de letalidades
 
 [Peste pneumônica (Y. Pestis) sem tratamento, OMS](https://www.who.int/news-room/fact-sheets/detail/plague): 100%
