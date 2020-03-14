@@ -1,3 +1,33 @@
 {
-"teste": 19
+    "COVID": {
+        "Reference": "https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(20)30183-5/fulltext",
+        "Date": "January 24, 2020",
+        "Journal": "The Lancet",
+        "Methods": "RT-PCR confirmed cases admitted to a hospital in Wuhan",
+        "Results":{
+            "N": 41,
+            "Men": "73% (30)",
+            "Women": "27% (11)",
+            "Median age": "49 years (IQR 41-58)",
+            "Signs and Symptoms":{
+                "Fever": "98% (40)",
+                "Cough": "76% (31)",
+                "Myalgia or fatigue": "44% (18)",
+                "Dyspnoea": "55% (22)",
+                "Dyspnoea (median time from onset)": "8 days (IQR 5-13)",
+                "Lymphopenia": "55% (22)",
+                "Pneumonia with abnormal findings on chest CT": "100% (41)" 
+            },
+            "Complications":{
+                "Acute respiratory distress syndrome ": "29% (12)",
+                "RNAaemia": "15% (6)",
+                "Acute cardiac injury": "12% (5)",
+                "Secondary infection": "10% (4)"
+            },
+            "Severe":{
+                "Admission to an ICU": "32% (13)",
+                "Death": "15% (6)"
+            }
+        }
+    }
 }
