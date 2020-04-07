@@ -4,7 +4,8 @@
 
 [Seleção de alguns estudos](https://rnahumaf.github.io/Health/COVID.json) em formato JSON, com dados a respeito da epidemiologia da COVID-19.  
 [Estudo comparativo de letalidades](https://rnahumaf.github.io/Health/Letalidade%20gripes%20e%20doenças.csv) em formato CSV.  
-[Códigos utilizados para previsões](https://github.com/rnahumaf/Health/tree/master/Predictions) em scripts na linguagem R.
+[Códigos utilizados para previsões](https://github.com/rnahumaf/Health/tree/master/Predictions) em scripts na linguagem R.  
+<iframe width="900" height="800" frameborder="0" scrolling="no" src="//plotly.com/~rnahumaf/1.embed"></iframe>
 
 
 
