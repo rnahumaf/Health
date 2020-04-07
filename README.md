@@ -1,5 +1,4 @@
-# Health
-Estudos relacionados à saúde em geral. [Clique aqui](https://rnahumaf.github.io/Health/) para acessar este conteúdo em formato de página (webpage).
+[Clique aqui](https://rnahumaf.github.io/Health/) para acessar este conteúdo em formato de página (webpage).
 
 ## COVID-19
 
