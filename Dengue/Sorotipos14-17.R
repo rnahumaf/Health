@@ -124,7 +124,9 @@ ggexport(annotate_figure(ggarrange(p1, p2, p3, p4,
                                          face = "italic", 
                                          size = 10,
                                          hjust = 0,x = 0),
-                         right = "Feito por: rnahumaf@gmail.com\nscript: https://github.com/rnahumaf/Health/tree/master/Dengue",
+                         right = text_grob("Feito por: rnahumaf@gmail.com (GitHub: rnahumaf)",
+                                           size = 10,
+                                           rot = -90)
                          ), 
                width = 2000, height = 2000, res = 300, 
                filename = "DENV.png")
