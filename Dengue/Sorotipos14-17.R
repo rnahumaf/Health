@@ -64,36 +64,39 @@ pal <- choose_palette()
 p1 <- plot_brmap(BR, data_to_join = DENV14_17, 
                     join_by = c("nome" = "UF"), 
                     var = c("chanceDENV1")) +
-  geom_point(data = DENV14_17[which(DENV14_17$DEN1>0),], 
+  geom_point(data = DENV14_17[which(DENV14_17$DEN4>0),], 
              aes(x = Lon, y = Lat, size = DEN1), 
-             colour = "red", alpha = 0.5) +
+             shape = 21, colour = "white", fill = "red", stroke = 2,
+             alpha = 0.5) +
   scale_size_continuous(range = c(0, 20), guide = 'none') +
-  scale_fill_stepsn(colours = pal(8),
-                    breaks=c(0.125, 0.25, 0.375, 0.5, 0.625, 0.750, 0.875),
+  scale_fill_stepsn(colours = pal(10),
+                    breaks=seq(0.1,0.9, 0.1),
                     limits = c(0, 1),
-                    name = TeX("$Proporção \\, \\frac{Sorotipo}{Total}$"))
+                    name = TeX("$Proporção \\, = \\, \\frac{Sorotipo}{Total}$"))
 
 p2 <- plot_brmap(BR, data_to_join = DENV14_17, 
                  join_by = c("nome" = "UF"), 
                  var = c("chanceDENV2")) +
-  geom_point(data = DENV14_17[which(DENV14_17$DEN2>0),], 
+  geom_point(data = DENV14_17[which(DENV14_17$DEN4>0),], 
              aes(x = Lon, y = Lat, size = DEN2), 
-             colour = "red", alpha = 0.5) +
+             shape = 21, colour = "white", fill = "red", stroke = 2,
+             alpha = 0.5) +
   scale_size_continuous(range = c(0, 20), guide = 'none') +
-  scale_fill_stepsn(colours = pal(8),
-                    breaks=c(0.125, 0.25, 0.375, 0.5, 0.625, 0.750, 0.875),
+  scale_fill_stepsn(colours = pal(10),
+                    breaks=seq(0.1,0.9, 0.1),
                     limits = c(0, 1),
                     name = TeX("$Proporção \\, \\frac{Sorotipo}{Total}$"))
 
 p3 <- plot_brmap(BR, data_to_join = DENV14_17, 
                  join_by = c("nome" = "UF"), 
                  var = c("chanceDENV3")) +
-  geom_point(data = DENV14_17[which(DENV14_17$DEN3>0),], 
+  geom_point(data = DENV14_17[which(DENV14_17$DEN4>0),], 
              aes(x = Lon, y = Lat, size = DEN3), 
-             colour = "red", alpha = 0.5) +
+             shape = 21, colour = "white", fill = "red", stroke = 2,
+             alpha = 0.5) +
   scale_size_continuous(range = c(0, 20), guide = 'none') +
-  scale_fill_stepsn(colours = pal(8),
-                    breaks=c(0.125, 0.25, 0.375, 0.5, 0.625, 0.750, 0.875),
+  scale_fill_stepsn(colours = pal(10),
+                    breaks=seq(0.1,0.9, 0.1),
                     limits = c(0, 1),
                     name = TeX("$Proporção \\, \\frac{Sorotipo}{Total}$"))
 
@@ -102,10 +105,11 @@ p4 <- plot_brmap(BR, data_to_join = DENV14_17,
                  var = c("chanceDENV4")) +
   geom_point(data = DENV14_17[which(DENV14_17$DEN4>0),], 
              aes(x = Lon, y = Lat, size = DEN4), 
-             colour = "red", alpha = 0.5) +
+             shape = 21, colour = "white", fill = "red", stroke = 2,
+             alpha = 0.5) +
   scale_size_continuous(range = c(0, 20), guide = 'none') +
-  scale_fill_stepsn(colours = pal(8),
-                    breaks=c(0.125, 0.25, 0.375, 0.5, 0.625, 0.750, 0.875),
+  scale_fill_stepsn(colours = pal(10),
+                    breaks=seq(0.1,0.9, 0.1),
                     limits = c(0, 1),
                     name = TeX("$Proporção \\, \\frac{Sorotipo}{Total}$"))
 
@@ -128,5 +132,5 @@ ggexport(annotate_figure(ggarrange(p1, p2, p3, p4,
                                            size = 10,
                                            rot = -90)
                          ), 
-               width = 2000, height = 2000, res = 300, 
+               width = 2500, height = 2500, res = 300, 
                filename = "DENV.png")
