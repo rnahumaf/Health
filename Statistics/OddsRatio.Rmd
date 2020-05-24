@@ -1,0 +1,271 @@
+---
+title: "A simulation study"
+output: 
+  html_notebook: 
+    toc: yes
+---
+# Hypothetical population
+
+Here we'll try to understand the differences between Risk Ratio (RR) and Odds Ratio (OR) in a hypothetical scenario. First I'll set a population of 1 million people, and this population will be divided in 20% who smoke and 80% who don't smoke.
+
+```{r}
+pop <- data.frame(smoke = sample(c("Smokes", "NeverSmoked"), 1e6, prob = c(0.2, 0.8), rep= T))
+```
+
+I want a relative risk of ~2 when considering the probability of someone who smokes to get cancer. Therefore, I'll set 2% of the smoking population to have cancer, and 1% of nonsmoking population to have cancer.
+
+```{r}
+pop[which(pop$smoke=="Smokes"), "cancer"] <- sample(c("Cancer", "Healthy"), sum(pop$smoke=="Smokes"), prob = c(0.02, 0.98), rep= T)
+pop[which(pop$smoke=="NeverSmoked"), "cancer"] <- sample(c("Cancer", "Healthy"), sum(pop$smoke=="NeverSmoked"), prob = c(0.01, 0.99), rep= T)
+
+# Plot the simulated population in a treemap
+library(treemap)
+pop2 <- unique(pop)
+for(i in 1:nrow(pop2)){
+  pop2[i, "counts"] <- sum(pop$smoke==pop2[i, "smoke"] & pop$cancer==pop2[i, "cancer"])
+}
+
+treemap(pop2, index = c("smoke", "cancer"), aspRatio = 1,
+        vSize = "counts", vColor = "cancer", border.lwds = c(1,1),
+        title = 'Distribution of cancer between smokers and no smokers',
+        #palette = "OrRd",
+        type = "categorical")
+```
+
+# Cohort simulation
+
+So if we calculate RR, we would find a ~2x risk of cancer in people who smoke, compared to those who don't smoke. However, cohort studies are performed with a random sample of the population, not the whole population. 
+
+To get a sample, let's first determine the adequate sample size, and then draw the estimates.
+
+```{r}
+# Determine sample size with alpha = 5% and power = 80%
+sample.size <- power.prop.test(p1 = 0.02, p2 = 0.01, power = 0.8)
+
+# Now let's draw this amount of patients from each condition in our dataset.
+## Draw a sample from smokers (we still don't know if they will get cancer or not)
+sample.smokes <- pop[which(pop$smoke=="Smokes"),][sample(c(1:sum(pop$smoke=="Smokes")), sample.size$n, replace = F),]
+## Draw a sample from nonsmokers (we still don't know if they will get cancer or not)
+sample.neversmoked <- pop[which(pop$smoke=="NeverSmoked"),][sample(c(1:sum(pop$smoke=="NeverSmoked")), sample.size$n, replace = F),]
+
+# Check our RR
+a <- sum(sample.smokes$cancer == "Cancer")/sum(nrow(sample.smokes))
+b <- sum(sample.neversmoked$cancer == "Cancer")/sum(nrow(sample.neversmoked))
+a/b
+```
+
+We see that everytime this script is run, it returns a different value for RR. This is because sampling error occurs, that is why alpha is 5% and power is 80%. We expect a rate of false positives and false negatives.
+
+We can plot the differences in RR after 40 different measurements (which is equivalent to 40 different studies looking at the same population, each one finding a different RR value.
+
+## Multiple plots
+
+```{r echo=TRUE}
+# Real RR
+a <- sum(pop$smoke=="Smokes" & pop$cancer=="Cancer")/sum(pop$smoke=="Smokes")
+b <- sum(pop$smoke=="NeverSmoked" & pop$cancer=="Cancer")/sum(pop$smoke=="NeverSmoked")
+RealRR <- a/b
+
+# Sample RR
+SampleRR <- c()
+for(i in 1:40){
+  sample.smokes <- pop[which(pop$smoke=="Smokes"),][sample(c(1:sum(pop$smoke=="Smokes")), sample.size$n, replace = F),]
+  sample.neversmoked <- pop[which(pop$smoke=="NeverSmoked"),][sample(c(1:sum(pop$smoke=="NeverSmoked")), sample.size$n, replace = F),]
+  a <- sum(sample.smokes$cancer == "Cancer")/sum(nrow(sample.smokes))
+  b <- sum(sample.neversmoked$cancer == "Cancer")/sum(nrow(sample.neversmoked))
+  SampleRR[i] <- a/b
+}
+
+# Plot differences
+library(ggplot2)
+ggplot(data = data.frame(RR = c(RealRR, SampleRR), 
+                         Group = c("Real", rep("Sample", 40))),
+       aes(x = Group, y = RR)) +
+  geom_boxplot(aes(colour=Group)) +
+  geom_point(size = 3, aes(colour=Group))
+```
+
+Now we can see the error introduced by sampling. Let's jump to a case-control simulation to see what we can learn.
+
+# Case-control simulation
+
+Let's proceed to the estimate of Odds Ratio in a case-control simulation. For a case-control study, we'll draw a sample from random people who have cancer, and the same number of people who don't have cancer, and check if they have smoked or not in the past.
+
+```{r}
+# Define the sample size for a case-control study
+library(epiR)
+sample.size.cc <- epi.sscc(OR = 2, p0 = 0.2, power = 0.8, n = NA)$n.case
+
+# Draw samples of people who have cancer or not.
+sample.cancer <- pop[which(pop$cancer=="Cancer"),][sample(c(1:sum(pop$cancer=="Cancer")), sample.size.cc, replace = F),]
+sample.healthy <- pop[which(pop$cancer=="Healthy"),][sample(c(1:sum(pop$cancer=="Healthy")), sample.size.cc, replace = F),]
+
+# Determine 40 OR calculations
+OR80 <- c()
+for(i in 1:40){
+  sample.cancer <- pop[which(pop$cancer=="Cancer"),][sample(c(1:sum(pop$cancer=="Cancer")), sample.size.cc, replace = F),]
+sample.healthy <- pop[which(pop$cancer=="Healthy"),][sample(c(1:sum(pop$cancer=="Healthy")), sample.size.cc, replace = F),]
+  a <- sum(sample.cancer$smoke == "Smokes")/sum(sample.healthy$smoke == "Smokes")
+  b <- sum(sample.cancer$smoke == "NeverSmoked")/sum(sample.healthy$smoke == "NeverSmoked")
+  OR80[i] <- a/b
+}
+
+# Plot differences
+library(ggplot2)
+ggplot(data = data.frame(RR = c(RealRR, OR80), 
+                         Group = c("Real", rep("Odds Ratio", 40))),
+       aes(x = Group, y = RR)) +
+  geom_boxplot(aes(colour=Group)) +
+  geom_point(size = 3, aes(colour=Group))
+```
+
+The OR distribution is very close to the distribution of the RR calculations. 
+
+## All plots compared
+
+Let us compare the Odds Ratio and the Risk Ratio obtained previously.
+
+```{r}
+ggplot(data = data.frame(RR = c(RealRR, SampleRR, OR80), 
+                         Group = c("Real", rep("Risk Ratio", 40), rep("Odds Ratio", 40))),
+       aes(x = Group, y = RR)) +
+  geom_boxplot(aes(colour=Group)) +
+  geom_point(size = 3, aes(colour=Group))
+```
+
+We can see very clearly than under optimal circumstances, the Odds Ratio is very close to the Risk Ratio, which in turn is a good, but far from perfect, estimate of the true risk.
+
+Not let's try something forbidden by the rules of statistics. The Risk Ratio should not be calculated using a case-control design (see below the **Math** section), but let's do it here, because many people learns best when they see images. Additionally, I'll calculate an Odds Ratio from the Cohort study above, which is allowed.
+
+```{r}
+# Determine 40 forbidden RR calculations from case-control studies
+forbiddenRR <- c()
+for(i in 1:40){
+  sample.cancer <- pop[which(pop$cancer=="Cancer"),][sample(c(1:sum(pop$cancer=="Cancer")), sample.size.cc, replace = F),]
+sample.healthy <- pop[which(pop$cancer=="Healthy"),][sample(c(1:sum(pop$cancer=="Healthy")), sample.size.cc, replace = F),]
+  smoked <- sum(sample.cancer$smoke == "Smokes") + sum(sample.healthy$smoke == "Smokes")
+  neversmoked <- sum(sample.cancer$smoke == "NeverSmoked") + sum(sample.healthy$smoke == "NeverSmoked")
+  a <- sum(sample.cancer$smoke == "Smokes")/smoked
+  b <- sum(sample.cancer$smoke == "NeverSmoked")/neversmoked
+  forbiddenRR[i] <- a/b
+}
+
+# Determine 40 allowed OR calculations from cohort studies
+allowedOR <- c()
+for(i in 1:40){
+  sample.smokes <- pop[which(pop$smoke=="Smokes"),][sample(c(1:sum(pop$smoke=="Smokes")), sample.size$n, replace = F),]
+  sample.neversmoked <- pop[which(pop$smoke=="NeverSmoked"),][sample(c(1:sum(pop$smoke=="NeverSmoked")), sample.size$n, replace = F),]
+  a <- sum(sample.smokes$cancer == "Cancer")/sum(sample.smokes$cancer == "Healthy")
+  b <- sum(sample.neversmoked$cancer == "Cancer")/sum(sample.neversmoked$cancer == "Healthy")
+  allowedOR[i] <- a/b
+}
+
+# Plot differences
+library(ggplot2)
+ggplot(data = data.frame(RR = c(RealRR, OR80, forbiddenRR, SampleRR, allowedOR), 
+                         Effect.size = c("Real", 
+                                   rep("OR", 40), 
+                                   rep("RR", 40), 
+                                   rep("RR", 40), 
+                                   rep("OR", 40)),
+                         Study.type = c("Real", 
+                                   rep("case-control", 40),
+                                   rep("case-control", 40), 
+                                   rep("cohort", 40), 
+                                   rep("cohort", 40))),
+       aes(x = Study.type, y = RR)) +
+  geom_boxplot(aes(colour=Effect.size)) +
+  geom_point(position = position_dodge(width=0.75), aes(colour=Effect.size))
+```
+
+
+This shows something really interesting. We can see that the distributions of the "allowed" calculations are all similar, and they wander around the **true** risk figure. However, the "forbidden" calculation, which is the RR in a case-control study, has a really narrow distribution of values that never get close to the true figure. Now let's try to understand some math behind this.
+
+# Math
+
+Before I proceed, let me explain some notations. $P(X)$ is the probability of X happening. $P(X|Y)$ is the probability of X happening, given that Y have already happened. This is a *Bayesian* probability. There are ways to expand a bayesian probability to deal with different situations, for example:
+
+$P(X) = 1 - P(\neg{X})$
+
+$P(X) = P(X|Y)P(Y) + P(X|\neg{Y})P(\neg{Y})$
+
+$P(X|Y) = \frac{P(X)P(Y|X)}{P(Y)}$
+
+$P(X|Y) = \frac{P(X|\neg{}Y)P(\neg{}Y)P(Y|X)}{P(\neg{}Y|X)P(Y)}$
+
+$P(X|Y) = 1 - P(\neg{X}|Y)$
+
+These are just a few examples of arithmetics that can be done when the measures are binary.
+
+Also, to avoid gigantic formulas ahead, let's replace "cancer" (binary outcome) and "smoked" (binary exposure) with X and Y, respectively.
+
+$X = cancer$
+
+$Y = smoked$
+
+$\neg{X}=healthy$
+
+$\neg{Y}=neversmoked$
+
+## Population risk
+
+So if you had the complete data for the whole population, it would be easy to calculate the risks and the odds. The **absolute risk** of having cancer, if you smoked, would be:
+$$Risk_{pop} = P(X|Y)$$
+And the **risk ratio** between having cancer if you smoked, and having cancer if you didn't smoke, would be:
+$$RR_{pop} = \frac{P(X|Y)}{P(X|\neg{Y})}$$
+## Sample risk
+
+Now, if you are *sampling* from a population, things get a little different, depending on the sampling design. That's because when you sample, you're drawing from a population with a specific probability. If you sample people based on their exposure status (**cohort design**), and then wait until you see the outcome, you would have
+$$Risk_{cohort}=\frac{P(X|Y)}{P(X|Y)+P(\neg{X}|Y)}=\frac{P(X|Y)}{1}=Risk_{pop}$$
+Which is precisely the same as calculating the population risk. Then if you try calculating the **risk ratio**
+
+$$RR_{cohort} = \frac{\frac{P(X|Y)}{P(X|Y)+P(\neg{X}|Y)}}{\frac{P(X|\neg{Y})}{P(X|\neg{Y})+P(\neg{X}|\neg{Y})}}=\frac{\frac{P(X|Y)}{1}}{\frac{P(X|\neg{Y})}{1}}=RR_{pop}$$
+
+You would also find that it would be mathematically the same as the population RR. So a **cohort study** has the perfect design for calculating the population risk, given that the sampling was random.
+
+However, if you sampled people based on their outcome status (**case-control design**), and then checked whether they were exposed or not, you would get a very different probability, that is the probability of finding an exposure, given that you know the outcome:
+$$Risk_{case-control}=\frac{P(Y|X)}{P(Y|X)+P(Y|\neg{X})}\ne{}P(X|Y), Risk_{case-control}\ne{}Risk_{pop}$$
+$$RR_{case-control} = \frac{\frac{P(Y|X)}{P(Y|X)+P(Y|\neg{X})}}{\frac{P(\neg{Y}|X)}{P(\neg{Y}|X)+P(\neg{Y}|\neg{X})}}\ne{}\frac{P(X|Y)}{P(X|\neg{Y})}, RR_{case-control}\ne{}RR_{pop}$$
+If you try to solve it, you wil find that $RR_{case-control}\ne{RR}$.
+
+## Population odds
+
+The odds of something happening is the probability of it happening divided by the probability of it not happening. For example, you would have 4 times (odds) more chance of winning than of losing if the probability of winning was 80%, because you would divide 80% by 20%. So the chance of cancer, if you smoked, would be:
+
+$$Odds_{pop} = \frac{P(X|Y)}{P(\neg{X|Y})}$$
+And the Odds Ratio would be the ratio between the odds of cancer if you smoked, and the odds of cancer, if you didn't smoke.
+
+$$OR_{pop} = \frac{\frac{P(X|Y)}{P(\neg{X|Y})}}{\frac{P(X|\neg{}Y)}{P(\neg{X|\neg{}Y})}}$$
+
+## Sample odds
+
+If you were doing a **case-control** study, in which the Odds Ratio would be the choice for measuring the **effect size**, you would be calculating this:
+
+$$OR_{case-control} = \frac{\frac{\frac{P(Y)P(X|Y)}{P(X)}}{\frac{P(Y)P(\neg{}X|Y)}{P(\neg{}X)}}}{\frac{\frac{P(\neg{}Y)P(X|\neg{}Y)}{P(X)}}{\frac{P(\neg{}Y)P(\neg{}X|\neg{}Y)}{P(\neg{}X)}}} = \frac{\frac{\frac{1.P(X|Y)}{1}}{\frac{1.P(\neg{}X|Y)}{1}}}{\frac{\frac{1.P(X|\neg{}Y)}{1}}{\frac{1.P(\neg{}X|\neg{}Y)}{1}}} = \frac{\frac{P(X|Y)}{P(\neg{}X|Y)}}{\frac{P(X|\neg{}Y)}{P(\neg{}X|\neg{}Y)}} = OR_{pop}$$
+
+
+I won't write here the equation for the Odds Ratio in a case-control study, because it would be exactly the same as the population odds ratio, therefore they are the same.
+
+## When OR ~ RR
+
+Whenever the population risk of a certain disease is close to zero (e.g. one in a million), we can assume that:
+
+```{r}
+plot(x = c(1:10), y = c(1:10), col = "white", ylab = "",xlab = "", axes=F)
+abline(h = c(5, 1, 9), v = c(6.5,3,10))
+text(x=c(4.5, 8, 2, 2), y=c(10, 10, 7, 3), c("outcome", "no outcome", "exposure", "no exposure"))
+text(x=c(4.5, 8, 4.5, 8), y=c(7, 7, 3, 3), c("a", "b", "c", "d"))
+```
+
+
+$$\lim\limits_{a,c \to 0}RR=\frac{\frac{a}{a+b}}{\frac{c}{c+d}}\approx\frac{a/b}{c/d}\approx OR$$
+
+Therefore, given the **rare disease assumption**, OR is a good and simplified approximation of RR.
+
+
+
+# Conclusion
+
+Here I tried to explain in a visual and a theoretical way why the Odds Ratio is an effect size measurement that can be calculated in either a **cohort** or a **case-control** study, because they are mathematically the same. However, the **risk ratio** can only be calculated using a cohort study design, while a case-control will only be able to offer an **odds ratio**, and that is mathematically true.
+
+Also, I explained why an odds ratio is a good approximation of the risk ratio in populations where the outcome is very rare, because when the probability of an outcome is near zero, the odds ratio *becomes* the risk ratio.
