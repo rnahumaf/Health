@@ -1,0 +1,93 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Meta analysis of case-control studies
+
+Case-control studies have binary outcomes and present event rate data. Usually, different studies analyze different populations, therefore a random-effects-model is appropriate. Also, in a case-control study, a Mantel-Haenszel method is appropriate to pool results, when you have raw data.
+
+```{r}
+library(readxl)
+cannabis <- read_xlsx("Modelo.xlsx")
+str(cannabis)
+```
+
+The raw data here is presented in:
+
+Ee (events in experimental treatment arm)
+Ne (N in experimental treatment arm)
+Ec (events in control arm)
+Nc (N in control arm)
+
+And the pre-calculated data is presented in:
+
+OR (odds ratio)
+lower (lower bounds of the confidence interval)
+upper (upper bounds of the confidence interval)
+
+## Raw data
+
+We can use the *meta* package to calculate the meta-analysis and present the **pooled Odds Ratio** like this:
+
+```{r}
+library(meta)
+m.bin <- metabin(Ee,
+                 Ne,
+                 Ec,
+                 Nc,
+                 data = cannabis,
+                 studlab = paste(Author),
+                 comb.fixed = FALSE,
+                 comb.random = TRUE,
+                 method.tau = "SJ",
+                 hakn = TRUE,
+                 prediction = TRUE,
+                 incr = 0.1,
+                 sm = "OR")
+m.bin
+```
+
+Now we will plot the meta-analysis in two ways.
+
+```{r}
+labbe.metabin(x = m.bin,
+              bg = "blue",
+              studlab = TRUE,
+              col.random = "red")
+
+# Forest plot
+forest(m.bin, smlab = "Odds of lung cancer in\never cannabis smokers")
+```
+
+## Pre calculated data
+
+First select only eligible studies that adjusted the effect size for smoking status, then calculate the log of the estimates.
+```{r}
+pre.cannabis <- cannabis[which(cannabis$Eligible_cigarette=="Yes"),]
+pre.cannabis$OR <- log(pre.cannabis$OR)
+pre.cannabis$lower <- log(pre.cannabis$lower)
+pre.cannabis$upper <- log(pre.cannabis$upper)
+```
+
+Then, the standard error can be calculated and used to complete the meta-analysis.
+```{r}
+pre.cannabis$seTE <- (pre.cannabis$upper - pre.cannabis$lower)/3.92
+
+m.gen <- metagen(OR,
+                 seTE,
+                 studlab = Author,
+                 method.tau = "SJ",
+                 sm = "OR",
+                 data = pre.cannabis,
+                 comb.fixed = F)
+m.gen
+```
+
+And the plots can be shown as before:
+
+```{r}
+# Forest plot
+forest(m.gen, smlab = "OR adjusted for\ncigarette smoking")
+```
+
