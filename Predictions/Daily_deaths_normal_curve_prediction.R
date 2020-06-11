@@ -1,3 +1,5 @@
+# Used the formula referred to in this article https://www.medrxiv.org/content/10.1101/2020.04.07.20056937v1.full.pdf
+
 library(minpack.lm)
 library(data.table)
 library(pracma)
